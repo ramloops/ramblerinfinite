@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ramblerinfinite</title>
+    <meta name="description" content="photographer • building something real">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #1a1a1a;
+            --bg-subtle: #141414;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --accent: #4a9eff;
+            --accent-dim: #2d5f99;
+            --border: #333333;
+            --border-light: #444444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--bg-dark);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 20px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 400;
+            font-size: 18px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 200ms ease;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 300;
+            font-size: 14px;
+            text-transform: lowercase;
+            transition: color 200ms ease;
+        }
+
+        .nav a:hover,
+        .nav a.active {
+            color: var(--text-primary);
+        }
+
+        /* Main */
+        .main {
+            margin-top: 80px;
+        }
+
+        .page {
+            display: none;
+            min-height: calc(100vh - 80px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero */
+        .hero {
+            height: 90vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), 
+                        url('https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            animation: slowZoom 25s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.03); }
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 600px;
+            padding: 0 24px;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 300;
+        }
+
+        .hero-tagline {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .hero-cta {
+            display: inline-block;
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            text-transform: lowercase;
+            transition: all 200ms ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .hero-cta:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Gallery */
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .gallery-header h1 {
+            font-size: 36px;
+            font-weight: 300;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .gallery-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 48px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .filter-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 200ms ease;
+            font-weight: 300;
+            text-transform: lowercase;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            color: var(--text-primary);
+            background: var(--bg-card);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2px;
+            margin-bottom: 60px;
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 3/2;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 300ms ease;
+            background: var(--bg-subtle);
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.02);
+            z-index: 10;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 500ms ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            padding: 32px 16px 16px;
+            color: white;
+            opacity: 0;
+            transition: opacity 300ms ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-title {
+            font-size: 14px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .gallery-meta {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* About */
+        .about-content {
+            max-width: 700px;
+            margin: 48px auto 0;
+        }
+
+        .about-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .about-text p {
+            margin-bottom: 24px;
+        }
+
+        .about-text .highlight {
+            color: var(--text-primary);
+            font-weight: 400;
+        }
+
+        /* Services - simplified */
+        .services-content {
+            max-width: 700px;
+            margin: 48px auto 0;
+        }
+
+        .service-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 32px;
+            margin-bottom: 24px;
+            border-radius: 6px;
+            transition: all 200ms ease;
+        }
+
+        .service-item:hover {
+            border-color: var(--border-light);
+            transform: translateY(-1px);
+        }
+
+        .service-item h3 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .service-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .service-status {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            margin-top: 12px;
+        }
+
+        /* Contact */
+        .contact-content {
+            max-width: 600px;
+            margin: 48px auto 0;
+            text-align: center;
+        }
+
+        .contact-simple {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 40px 32px;
+            border-radius: 8px;
+            margin-top: 48px;
+        }
+
+        .contact-simple h3 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 16px;
+            color: var(--text-primary);
+        }
+
+        .contact-simple p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .contact-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            transition: color 200ms ease;
+        }
+
+        .contact-link:hover {
+            color: var(--text-primary);
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 95vw;
+            max-height: 95vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 200ms ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--accent);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 24px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 200ms ease;
+        }
+
+        .lightbox-nav:hover {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .lightbox-prev {
+            left: 20px;
+        }
+
+        .lightbox-next {
+            right: 20px;
+        }
+
+        .lightbox-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* Page headers */
+        .page-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 300;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .nav {
+                gap: 20px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 1px;
+            }
+
+            .gallery-filters {
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+
+            .lightbox-nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo" onclick="showPage('home')">ramblerinfinite</a>
+            <nav class="nav">
+                <a href="#" onclick="showPage('home')" class="nav-link active">home</a>
+                <a href="#" onclick="showPage('work')" class="nav-link">work</a>
+                <a href="#" onclick="showPage('about')" class="nav-link">about</a>
+                <a href="#" onclick="showPage('services')" class="nav-link">services</a>
+                <a href="#" onclick="showPage('contact')" class="nav-link">contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="hero-bg"></div>
+                <div class="hero-content">
+                    <h1 class="hero-title">ramblerinfinite</h1>
+                    <p class="hero-subtitle">photographer</p>
+                    <p class="hero-tagline">building something real • serious about the craft</p>
+                    <a href="#" class="hero-cta" onclick="showPage('work')">view work</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Work Page -->
+        <div id="work" class="page">
+            <section class="section">
+                <div class="container">
+                    <div class="page-header">
+                        <h1>work</h1>
+                        <p>landscapes • wildlife • astrophotography • abstract</p>
+                    </div>
+
+                    <div class="gallery-filters">
+                        <button onclick="filterGallery('all')" class="filter-btn active">all</button>
+                        <button onclick="filterGallery('landscapes')">landscapes</button>
+                        <button onclick="filterGallery('wildlife')">wildlife</button>
+                        <button onclick="filterGallery('astro')">astrophotography</button>
+                        <button onclick="filterGallery('abstract')">abstract</button>
+                    </div>
+
+                    <div class="gallery" id="gallery">
+                        <!-- 16:9 Landscape -->
+                        <div class="gallery-item" data-category="landscapes" onclick="openLightbox('National_Picture_Day-5.jpg', 'alpine reflection', 'mount rainier area')">
+                            <img src="National_Picture_Day-5.jpg" alt="alpine reflection">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">alpine reflection</div>
+                                <div class="gallery-meta">mount rainier area</div>
+                            </div>
+                        </div>
+
+                        <!-- 16:9 Astro -->
+                        <div class="gallery-item" data-category="astro" onclick="openLightbox('milkyway.jpg', 'milky way core', 'desert sky')">
+                            <img src="milkyway.jpg" alt="milky way core">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">milky way core</div>
+                                <div class="gallery-meta">desert sky</div>
+                            </div>
+                        </div>
+
+                        <!-- 9:16 Portrait Wildlife -->
+                        <div class="gallery-item" data-category="wildlife" onclick="openLightbox('bison.jpg', 'grizzly encounter', 'patient waiting paid off')">
+                            <img src="bison.jpg" alt="grizzly encounter">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">grizzly encounter</div>
+                                <div class="gallery-meta">patient waiting paid off</div>
+                            </div>
+                        </div>
+
+                        <!-- 3:2 Classic -->
+                        <div class="gallery-item" data-category="abstract" onclick="openLightbox('grizzly.jpg', 'stone patterns', 'beach textures')">
+                            <img src="grizzly.jpg" alt="stone patterns">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">stone patterns</div>
+                                <div class="gallery-meta">beach textures</div>
+                            </div>
+                        </div>
+
+                        <!-- 16:9 Landscape -->
+                        <div class="gallery-item" data-category="landscapes" onclick="openLightbox('GoldenGate.jpg', 'glacial lake', 'crystal clear water')">
+                            <img src="GoldenGate.jpg" alt="glacial lake">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">glacial lake</div>
+                                <div class="gallery-meta">crystal clear water</div>
+                            </div>
+                        </div>
+
+                        <!-- 9:16 Portrait Forest -->
+                        <div class="gallery-item" data-category="landscapes" onclick="openLightbox('GrandPrismatic.jpg', 'forest cathedral', 'pacific northwest')">
+                            <img src="GrandPrismatic.jpg" alt="forest cathedral">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">forest cathedral</div>
+                                <div class="gallery-meta">pacific northwest</div>
+                            </div>
+                        </div>
+
+                        <!-- 3:2 Wildlife -->
+                        <div class="gallery-item" data-category="wildlife" onclick="openLightbox('UTAHROAD.JPG', 'duck portrait', 'local wetlands')">
+                            <img src="UTAHROAD.JPG" alt="duck portrait">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">duck portrait</div>
+                                <div class="gallery-meta">local wetlands</div>
+                            </div>
+                        </div>
+
+                        <!-- 16:9 Astro -->
+                        <div class="gallery-item" data-category="astro" onclick="openLightbox('BNatyam1.jpg', 'star trails', 'four hour exposure')">
+                            <img src="BNatyam1.jpg" alt="star trails">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">star trails</div>
+                                <div class="gallery-meta">four hour exposure</div>
+                            </div>
+                        </div>
+
+                        <!-- 9:16 Abstract -->
+                        <div class="gallery-item" data-category="abstract" onclick="openLightbox('MonumentValley.JPG', 'autumn geometry', 'forest patterns')">
+                            <img src="MonumentValley.JPG" alt="autumn geometry">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">autumn geometry</div>
+                                <div class="gallery-meta">forest patterns</div>
+                            </div>
+                        </div>
+
+                        <!-- 16:9 Coastal -->
+                        <div class="gallery-item" data-category="landscapes" onclick="openLightbox('National_Picture_Day-6.jpg', 'coastal fog', 'oregon coast morning')">
+                            <img src="National_Picture_Day-6.JPG" alt="coastal fog">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">coastal fog</div>
+                                <div class="gallery-meta">oregon coast morning</div>
+                            </div>
+                        </div>
+
+                        <!-- 16:9 Aurora -->
+                        <div class="gallery-item" data-category="astro" onclick="openLightbox('National_Picture_Day-8.jpg', 'aurora reflection', 'northern lights')">
+                            <img src="National_Picture_Day-8.jpg" alt="aurora reflection">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">aurora reflection</div>
+                                <div class="gallery-meta">northern lights</div>
+                            </div>
+                        </div>
+
+                        <!-- 3:2 Desert -->
+                        <div class="gallery-item" data-category="landscapes" onclick="openLightbox('National_Picture_Day-3.jpg', 'desert arch', 'utah sunrise')">
+                            <img src="National_Picture_Day-3.jpg" alt="desert arch">
+                            <div class="gallery-overlay">
+                                <div class="gallery-title">desert arch</div>
+                                <div class="gallery-meta">utah sunrise</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <section class="section">
+                <div class="container">
+                    <div class="page-header">
+                        <h1>about</h1>
+                        <p>photographer • building a portfolio • taking it seriously</p>
+                    </div>
+
+                    <div class="about-content">
+                        <div class="about-text">
+                            <p>I'm a photographer focused on landscapes, wildlife, and astrophotography. <span class="highlight">The work speaks for itself</span> - I'm putting in the time to get technically solid shots and develop a consistent style.</p>
+                            
+                            <p><span class="highlight">Still building the business side</span>, but I'm not just messing around with a camera. I travel for shots, wake up at 3am for astrophotography, and wait hours for the right wildlife moment. This is becoming more than a hobby.</p>
+                            
+                            <p>I'm interested in collaborating with other photographers, aspiring models, or anyone working on creative projects. <span class="highlight">I prefer natural, unposed work</span> and I'm more comfortable behind the camera than self-promoting, but the portfolio is growing steadily.</p>
+                            
+                            <p>My following is small right now, but I'm focused on creating quality work rather than chasing social media metrics. <span class="highlight">Building something real takes time.</span></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Services Page -->
+        <div id="services" class="page">
+            <section class="section">
+                <div class="container">
+                    <div class="page-header">
+                        <h1>services</h1>
+                        <p>available work • growing capabilities</p>
+                    </div>
+
+                    <div class="services-content">
+                        <div class="service-item">
+                            <h3>Print Sales</h3>
+                            <p>High-quality prints of landscape and astrophotography work. Limited selection currently available, expanding the catalog as I build the portfolio.</p>
+                            <div class="service-status">setting up • contact for availability</div>
+                        </div>
+
+                        <div class="service-item">
+                            <h3>Collaborative Shoots</h3>
+                            <p>Working with aspiring models, other photographers, or creative projects. Natural light preferred, no pressure approach, focus on authentic moments.</p>
+                            <div class="service-status">open to discussions • TFP considered</div>
+                        </div>
+
+                        <div class="service-item">
+                            <h3>Stock Licensing</h3>
+                            <p>Nature and landscape images available for commercial licensing. Growing library of high-resolution work from various locations.</p>
+                            <div class="service-status">selective licensing • inquiry basis</div>
+                        </div>
+
+                        <div class="service-item">
+                            <h3>Custom Projects</h3>
+                            <p>Location-based photography for small businesses, tourism, or conservation projects. Still developing this side of the work.</p>
+                            <div class="service-status">taking select projects • building experience</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <section class="section">
+                <div class="container">
+                    <div class="page-header">
+                        <h1>contact</h1>
+                        <p>for collaborations • print inquiries • project discussions</p>
+                    </div>
+
+                    <div class="contact-content">
+                        <div class="contact-simple">
+                            <h3>email</h3>
+                            <p>serious inquiries only • allow time for response</p>
+                            <a href="mailto:contact@ramblerinfinite.com" class="contact-link">contact@ramblerinfinite.com</a>
+                        </div>
+                        
+                        <p style="margin-top: 32px; color: var(--text-muted); font-size: 14px;">
+                            building the business side gradually • focused on quality over volume
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 ramblerinfinite • all work available for licensing</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <button class="lightbox-nav lightbox-prev" onclick="previousLightboxImage()">‹</button>
+            <button class="lightbox-nav lightbox-next" onclick="nextLightboxImage()">›</button>
+            <img id="lightbox-image" src="" alt="">
+            <div class="lightbox-info" id="lightbox-info"></div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let currentPage = 'home';
+        let currentFilter = 'all';
+        let currentLightboxIndex = 0;
+        let lightboxImages = [];
+
+        // Navigation
+        function showPage(page) {
+            document.getElementById(currentPage).classList.remove('active');
+            document.getElementById(page).classList.add('active');
+            currentPage = page;
+            
+            // Update nav
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.querySelector(`a[onclick="showPage('${page}')"]`).classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+
+        // Gallery filtering
+        function filterGallery(category) {
+            currentFilter = category;
+            
+            // Update active button
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Filter images
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                if (category === 'all' || item.dataset.category === category) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Lightbox
+        function openLightbox(src, title, location) {
+            const visibleItems = document.querySelectorAll('.gallery-item:not([style*="display: none"])');
+            lightboxImages = Array.from(visibleItems).map(item => {
+                const img = item.querySelector('img');
+                const overlay = item.querySelector('.gallery-overlay');
+                const titleEl = overlay?.querySelector('.gallery-title');
+                const metaEl = overlay?.querySelector('.gallery-meta');
+                return {
+                    src: img.src.replace('w=800', 'w=1600'),
+                    title: titleEl?.textContent || '',
+                    meta: metaEl?.textContent || ''
+                };
+            });
+            
+            currentLightboxIndex = lightboxImages.findIndex(img => img.src === src);
+            if (currentLightboxIndex === -1) currentLightboxIndex = 0;
+            
+            document.getElementById('lightbox-image').src = src;
+            document.getElementById('lightbox-info').innerHTML = `
+                <div style="font-weight: 400; margin-bottom: 4px;">${title}</div>
+                <div style="font-size: 12px; color: #888;">${location}</div>
+            `;
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('lightbox').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextLightboxImage() {
+            if (lightboxImages.length === 0) return;
+            currentLightboxIndex = (currentLightboxIndex + 1) % lightboxImages.length;
+            const image = lightboxImages[currentLightboxIndex];
+            document.getElementById('lightbox-image').src = image.src;
+            document.getElementById('lightbox-info').innerHTML = `
+                <div style="font-weight: 400; margin-bottom: 4px;">${image.title}</div>
+                <div style="font-size: 12px; color: #888;">${image.meta}</div>
+            `;
+        }
+
+        function previousLightboxImage() {
+            if (lightboxImages.length === 0) return;
+            currentLightboxIndex = (currentLightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+            const image = lightboxImages[currentLightboxIndex];
+            document.getElementById('lightbox-image').src = image.src;
+            document.getElementById('lightbox-info').innerHTML = `
+                <div style="font-weight: 400; margin-bottom: 4px;">${image.title}</div>
+                <div style="font-size: 12px; color: #888;">${image.meta}</div>
+            `;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('lightbox').classList.contains('active')) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                } else if (e.key === 'ArrowLeft') {
+                    previousLightboxImage();
+                } else if (e.key === 'ArrowRight') {
+                    nextLightboxImage();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
