@@ -185,76 +185,195 @@
   .hero-subtitle{ color: rgba(255,255,255,0.88); }
   .hero-tag{ color: rgba(255,255,255,0.78); }
 }
+/*changing the below code */
 
-/* ===== Mobile: swap quadrant overlay for scroll layout ===== */
+/* ===== Mobile: enhanced layout ===== */
 @media (max-width: 768px){
-  /* Let the hero grow naturally */
+  /* Hero section with proper padding */
   .hero{
     height: auto;
-    padding: 10px 12px 18px;
+    padding: 24px 16px 32px;
+    position: relative;
   }
 
-  /* Centerpiece becomes an inline header above the tiles */
+  /* Centerpiece as floating overlay (like desktop) */
   .centerpiece{
-    position: static;        /* was absolute on desktop */
-    transform: none;
-    width: auto;
-    margin: 8px 4px 10px;
-    text-align: left;
-    background: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border: 0;
-    box-shadow: none;
-    z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: calc(100% - 32px);
+    max-width: 420px;
+    margin: 0;
+    padding: 24px 20px;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.24));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    z-index: 10;
   }
-  .hero-title{ font-size: 28px; font-weight: 600; text-shadow: none; }
-  .hero-subtitle{ color: var(--muted); }
-  .hero-tag{ color: var(--hint); margin-bottom: 12px; }
-  .cta{ width: 100%; justify-content: center; margin-top: 8px; }
+  .centerpiece::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:inherit;
+    background: radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,.35), rgba(0,0,0,.25) 60%, transparent 100%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .centerpiece > *{ position: relative; z-index:1; }
+  
+  .hero-title{ 
+    font-size: 32px; 
+    font-weight: 600; 
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 8px rgba(0,0,0,.5);
+    color: rgba(255,255,255,.98);
+  }
+  .hero-subtitle{ 
+    color: rgba(255,255,255,.85); 
+    font-size: 15px;
+    margin-bottom: 4px;
+  }
+  .hero-tag{ 
+    color: rgba(255,255,255,.75); 
+    font-size: 13px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+  
+  /* CTA buttons stacked */
+  .centerpiece > a.cta{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 0 0 10px;
+    padding: 14px 20px;
+    font-size: 15px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+  }
+  .centerpiece > a.cta:last-of-type{
+    margin-bottom: 0;
+  }
+  .centerpiece > a.cta:hover{
+    background: var(--accent);
+    color: #0b0c0d;
+    transform: translateY(-1px);
+  }
 
-  /* Quadrants → stacked tiles */
+  /* Quadrants → elegant tiles (with space for overlay) */
   .hero-grid{
-    grid-template-columns: 1fr;      /* single column */
+    grid-template-columns: 1fr;
     grid-template-rows: none;
-    grid-auto-rows: 180px;           /* tile height */
-    gap: 10px;
+    grid-auto-rows: 220px;
+    gap: 16px;
     background: none;
     border-radius: 0;
     overflow: visible;
+    min-height: 600px; /* Ensure enough space for overlay */
+    padding-bottom: 80px; /* Space at bottom */
   }
+  
   .quad{
-    border-radius: 12px;
+    border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,.25);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
+  .quad:active{
+    transform: scale(0.98);
+    box-shadow: 0 2px 12px rgba(0,0,0,.3);
+  }
+  
   .quad img{
     object-fit: cover;
-    width: 100%; height: 100%;
-    transform: none;                 /* no hover scaling on mobile */
-    filter: none;
+    width: 100%; 
+    height: 100%;
+    transform: none;
+    filter: brightness(0.85);
   }
 
-  /* Keep labels always visible and readable */
+  /* Labels always visible with better contrast */
   .quad-label{
-    opacity: 1;                      /* always on */
-    padding: 16px;
+    opacity: 1;
+    padding: 20px;
     text-align: left;
-    background: linear-gradient(rgba(0,0,0,.25), rgba(0,0,0,.6));
+    background: linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.5) 60%, transparent 100%);
   }
-  .quad-kicker{ font-size: 12px; opacity: .95; }
-  .quad-title{ font-size: 18px; font-weight: 500; }
+  .quad-kicker{ 
+    font-size: 11px; 
+    opacity: .85;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    color: rgba(255,255,255,.7);
+  }
+  .quad-title{ 
+    font-size: 19px; 
+    font-weight: 500;
+    color: rgba(255,255,255,.95);
+    letter-spacing: -0.01em;
+  }
 
-  /* Make tap targets comfy */
+  /* Navigation */
   .hamburger{ display: flex; }
   .nav{ display: none; }
+  
+  /* Improved section spacing */
+  .section{ padding: 48px 16px; }
+  .page-header{ margin-bottom: 32px; }
+  .page-header h1{ font-size: 36px; }
+  
+  /* Gallery improvements */
+  .gallery{ 
+    gap: 12px;
+    border-radius: 12px;
+  }
+  .filters{
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+  .filter-btn{
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+  
+  /* Cards with better spacing */
+  .cards{ gap: 16px; }
+  .card{ 
+    padding: 24px;
+    border-radius: 12px;
+  }
+  
+  /* Form improvements */
+  .contact-form{ gap: 16px; }
+  .form-input, .form-textarea{ 
+    padding: 14px 16px;
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+  
+  /* Footer */
+  footer{ 
+    padding: 32px 16px;
+    font-size: 13px;
+  }
 }
 
-/* Tiny phones: slightly shorter tiles */
+/* Small phones: tighter spacing */
 @media (max-width: 420px){
-  .hero-grid{ grid-auto-rows: 150px; }
-  .hero-title{ font-size: 26px; }
+  .hero{ padding: 20px 12px 28px; }
+  .hero-grid{ grid-auto-rows: 200px; gap: 12px; }
+  .hero-title{ font-size: 28px; }
+  .centerpiece{ padding: 20px 16px; }
+  .section{ padding: 40px 12px; }
+  .page-header h1{ font-size: 32px; }
+  .quad-label{ padding: 16px; }
 }
-
 /* End fix */
 
 
